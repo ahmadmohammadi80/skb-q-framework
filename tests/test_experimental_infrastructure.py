@@ -28,6 +28,7 @@ from skbq.bridge.structural_features import (  # noqa: E402
     OperatorStructuralMetadata,
     extract_operator_features,
 )
+from skbq.config import SeedRegistry  # noqa: E402
 from skbq.vocabulary import default_operator_registry  # noqa: E402
 
 
@@ -88,13 +89,15 @@ class BaselineComparisonTests(unittest.TestCase):
         )
 
     def test_random_fallback_is_seed_reproducible(self) -> None:
-        baseline = RandomFallbackBaseline(seed=42)
+        seed_registry = SeedRegistry({"baseline": 42, "python": 0})
+        baseline = RandomFallbackBaseline(seed_registry=seed_registry)
 
         first = baseline.run(self.source, self.candidates)
         second = baseline.run(self.source, self.candidates)
 
         self.assertEqual(first.selected_candidate.identifier, second.selected_candidate.identifier)
         self.assertEqual(first.baseline_name, "random_fallback")
+        self.assertEqual(first.details["seed_registry"], {"baseline": 42, "python": 0})
 
     def test_structural_and_semantic_baselines_select_expected_candidate(self) -> None:
         structural = StructuralNearestNeighborBaseline().run(self.source, self.candidates)

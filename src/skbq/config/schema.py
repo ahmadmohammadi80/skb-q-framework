@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+import hashlib
 import json
 from pathlib import Path
 from types import MappingProxyType
@@ -21,6 +22,23 @@ except ModuleNotFoundError:  # pragma: no cover - exercised only on Python 3.10
 
 
 ConfigMapping = Mapping[str, Any]
+CURRENT_SCHEMA_VERSION = "1.0"
+DEFAULT_EXPERIMENT_ID = "default"
+SUPPORTED_SCHEMA_VERSIONS = frozenset({CURRENT_SCHEMA_VERSION})
+EXPERIMENT_CONFIG_FIELDS = frozenset(
+    {
+        "schema_version",
+        "experiment_id",
+        "vocabulary",
+        "backbone",
+        "budget",
+        "tau",
+        "k_prime",
+        "confidence_threshold",
+        "lambda_weights",
+        "random_seeds",
+    }
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -161,7 +179,7 @@ class RandomSeeds:
             raise ValueError("at least one random seed is required")
         validated = {
             str(name): _seed_value(seed, f"random_seeds[{name}]")
-            for name, seed in self.values.items()
+            for name, seed in sorted(self.values.items(), key=lambda item: str(item[0]))
         }
         object.__setattr__(self, "values", MappingProxyType(validated))
 
@@ -174,7 +192,7 @@ class RandomSeeds:
     def to_mapping(self) -> dict[str, object]:
         """Return a JSON-serializable representation."""
 
-        return dict(self.values)
+        return dict(sorted(self.values.items()))
 
 
 @dataclass(frozen=True, slots=True)
@@ -189,8 +207,18 @@ class ExperimentConfig:
     confidence_threshold: float
     lambda_weights: LambdaWeights
     random_seeds: RandomSeeds
+    schema_version: str = CURRENT_SCHEMA_VERSION
+    experiment_id: str = DEFAULT_EXPERIMENT_ID
 
     def __post_init__(self) -> None:
+        if not isinstance(self.schema_version, str):
+            raise TypeError("schema_version must be a string")
+        if self.schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        if not isinstance(self.experiment_id, str):
+            raise TypeError("experiment_id must be a string")
+        if not self.experiment_id.strip():
+            raise ValueError("experiment_id cannot be empty")
         if self.tau <= 0.0:
             raise ValueError("temperature tau must be positive")
         if self.k_prime <= 0:
@@ -202,6 +230,7 @@ class ExperimentConfig:
     def from_mapping(cls, data: ConfigMapping) -> ExperimentConfig:
         """Build the full experiment config from a mapping."""
 
+        _reject_unknown_fields(data, EXPERIMENT_CONFIG_FIELDS, "experiment config")
         return cls(
             vocabulary=VocabularyConfig.from_mapping(_required_mapping(data, "vocabulary")),
             backbone=BackboneConfig.from_mapping(_required_mapping(data, "backbone")),
@@ -213,12 +242,16 @@ class ExperimentConfig:
                 _required_mapping(data, "lambda_weights")
             ),
             random_seeds=RandomSeeds.from_mapping(_required_mapping(data, "random_seeds")),
+            schema_version=_optional_str(data, "schema_version", CURRENT_SCHEMA_VERSION),
+            experiment_id=_optional_str(data, "experiment_id", DEFAULT_EXPERIMENT_ID),
         )
 
     def to_mapping(self) -> dict[str, object]:
         """Return a JSON-serializable representation."""
 
         return {
+            "schema_version": self.schema_version,
+            "experiment_id": self.experiment_id,
             "vocabulary": self.vocabulary.to_mapping(),
             "backbone": self.backbone.to_mapping(),
             "budget": self.budget.to_mapping(),
@@ -228,6 +261,16 @@ class ExperimentConfig:
             "lambda_weights": self.lambda_weights.to_mapping(),
             "random_seeds": self.random_seeds.to_mapping(),
         }
+
+    def canonical_json(self) -> str:
+        """Return deterministic canonical JSON for this configuration."""
+
+        return canonical_config_json(self)
+
+    def config_hash(self) -> str:
+        """Return the SHA-256 hash of this configuration's canonical JSON."""
+
+        return deterministic_config_hash(self)
 
 
 def load_experiment_config(path: str | Path) -> ExperimentConfig:
@@ -246,17 +289,52 @@ def load_experiment_config(path: str | Path) -> ExperimentConfig:
     if not isinstance(data, Mapping):
         raise TypeError("experiment config root must be a mapping")
 
-    experiment_data = data.get("experiment", data)
+    if "experiment" in data:
+        _reject_unknown_fields(data, frozenset({"experiment"}), "config file root")
+        experiment_data = data["experiment"]
+    else:
+        experiment_data = data
     if not isinstance(experiment_data, Mapping):
         raise TypeError("experiment config must contain a mapping")
 
     return ExperimentConfig.from_mapping(experiment_data)
 
 
+def canonical_config_json(config: ExperimentConfig | ConfigMapping) -> str:
+    """Serialize a config deterministically for hashing and provenance."""
+
+    experiment_config = (
+        config if isinstance(config, ExperimentConfig) else ExperimentConfig.from_mapping(config)
+    )
+    return json.dumps(
+        experiment_config.to_mapping(),
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+    )
+
+
+def deterministic_config_hash(config: ExperimentConfig | ConfigMapping) -> str:
+    """Return the SHA-256 hash of a config's canonical JSON representation."""
+
+    canonical = canonical_config_json(config)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def _required_value(data: ConfigMapping, key: str) -> object:
     if key not in data:
         raise KeyError(f"missing required config field: {key}")
     return data[key]
+
+
+def _reject_unknown_fields(
+    data: ConfigMapping,
+    allowed_fields: frozenset[str],
+    context: str,
+) -> None:
+    unknown_fields = sorted(str(field) for field in set(data) - allowed_fields)
+    if unknown_fields:
+        raise KeyError(f"unknown {context} field(s): {', '.join(unknown_fields)}")
 
 
 def _required_mapping(data: ConfigMapping, key: str) -> ConfigMapping:

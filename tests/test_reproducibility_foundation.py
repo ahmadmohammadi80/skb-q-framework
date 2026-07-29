@@ -13,11 +13,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import skbq  # noqa: E402
 from skbq.config import (  # noqa: E402
+    CURRENT_SCHEMA_VERSION,
     ExperimentConfig,
+    SeedRegistry,
     capture_experiment_metadata,
+    deterministic_config_hash,
     load_experiment_config,
 )
-from skbq.config.metadata import current_git_commit_hash  # noqa: E402
+from skbq.config.metadata import (  # noqa: E402
+    current_git_branch,
+    current_git_commit_hash,
+    is_git_dirty,
+)
 
 try:
     import tomllib
@@ -27,6 +34,8 @@ except ModuleNotFoundError:  # pragma: no cover - only relevant on Python 3.10
 
 def sample_config_mapping() -> dict[str, object]:
     return {
+        "schema_version": CURRENT_SCHEMA_VERSION,
+        "experiment_id": "unit-test-experiment",
         "vocabulary": {
             "registry": "default",
             "operators": ["Attention", "GQA"],
@@ -73,6 +82,8 @@ class ExperimentConfigTests(unittest.TestCase):
         config = ExperimentConfig.from_mapping(sample_config_mapping())
 
         self.assertEqual(config.vocabulary.registry, "default")
+        self.assertEqual(config.schema_version, CURRENT_SCHEMA_VERSION)
+        self.assertEqual(config.experiment_id, "unit-test-experiment")
         self.assertEqual(config.backbone.encoder, "frozen-placeholder")
         self.assertEqual(config.budget.total, 8.0)
         self.assertEqual(config.k_prime, 3)
@@ -85,6 +96,34 @@ class ExperimentConfigTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             ExperimentConfig.from_mapping(data)
+
+    def test_experiment_config_keeps_backward_compatible_defaults(self) -> None:
+        data = sample_config_mapping()
+        del data["schema_version"]
+        del data["experiment_id"]
+
+        config = ExperimentConfig.from_mapping(data)
+
+        self.assertEqual(config.schema_version, CURRENT_SCHEMA_VERSION)
+        self.assertEqual(config.experiment_id, "default")
+
+    def test_experiment_config_rejects_unknown_top_level_fields(self) -> None:
+        data = sample_config_mapping()
+        data["unexpected"] = True
+
+        with self.assertRaises(KeyError):
+            ExperimentConfig.from_mapping(data)
+
+    def test_config_hash_is_deterministic(self) -> None:
+        first = sample_config_mapping()
+        second = sample_config_mapping()
+        second["random_seeds"] = {"baseline": 42, "python": 0}
+
+        self.assertEqual(deterministic_config_hash(first), deterministic_config_hash(second))
+        self.assertEqual(
+            len(ExperimentConfig.from_mapping(first).config_hash()),
+            64,
+        )
 
     def test_load_experiment_config_from_json(self) -> None:
         with TemporaryDirectory() as directory:
@@ -103,13 +142,28 @@ class ExperimentMetadataTests(unittest.TestCase):
         metadata = capture_experiment_metadata(
             repo_path=root,
             package_names=("definitely-missing-skbq-test-package",),
+            experiment_id="unit-test-experiment",
         )
 
+        self.assertEqual(metadata.experiment_id, "unit-test-experiment")
         self.assertEqual(metadata.git_commit_hash, current_git_commit_hash(root))
+        self.assertEqual(metadata.git_branch, current_git_branch(root))
+        self.assertEqual(metadata.git_is_dirty, is_git_dirty(root))
         self.assertIsNotNone(metadata.python_version)
         self.assertIn("definitely-missing-skbq-test-package", metadata.package_versions)
         self.assertIsNone(metadata.package_versions["definitely-missing-skbq-test-package"])
         self.assertIn("+00:00", metadata.timestamp_utc)
+
+
+class SeedRegistryTests(unittest.TestCase):
+    def test_seed_registry_derives_stable_component_seed(self) -> None:
+        registry = SeedRegistry({"python": 0, "baseline": 42})
+
+        first = registry.derive_seed("component", "stream")
+        second = registry.derive_seed("component", "stream")
+
+        self.assertEqual(first, second)
+        self.assertNotEqual(first, registry.derive_seed("component", "other-stream"))
 
 
 if __name__ == "__main__":

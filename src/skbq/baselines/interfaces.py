@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-import random
 from typing import Protocol
 
 from skbq.bridge.candidate_filter import (
@@ -17,6 +16,7 @@ from skbq.bridge.candidate_filter import (
 )
 from skbq.bridge.similarity import EmbeddingSemanticSimilarity, SimilarityContext
 from skbq.bridge.skbq_bridge import BridgeDecision, BridgeSource, SKBQBridge
+from skbq.config.seeds import SeedRegistry
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,6 +46,8 @@ class RandomFallbackBaseline:
 
     seed: int = 0
     name: str = "random_fallback"
+    seed_registry: SeedRegistry | None = None
+    seed_name: str = "baseline"
 
     def run(
         self,
@@ -57,13 +59,23 @@ class RandomFallbackBaseline:
         if not candidates:
             raise ValueError("RandomFallbackBaseline requires at least one candidate")
 
-        rng = random.Random(f"{self.seed}:{source.identifier}:{len(candidates)}")
+        seed_registry = self.seed_registry or SeedRegistry({self.seed_name: self.seed})
+        rng = seed_registry.random_for(
+            component=self.name,
+            stream=f"{source.identifier}:{len(candidates)}",
+            base_seed_name=self.seed_name,
+            default_seed=self.seed,
+        )
         index = rng.randrange(len(candidates))
         return BaselineDecision(
             baseline_name=self.name,
             selected_candidate=candidates[index],
             score=None,
-            details={"seed": self.seed, "index": index},
+            details={
+                "seed_name": self.seed_name,
+                "seed_registry": seed_registry.to_mapping(),
+                "index": index,
+            },
         )
 
 

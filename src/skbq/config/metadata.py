@@ -20,7 +20,10 @@ from types import MappingProxyType
 class ExperimentMetadata:
     """Immutable metadata captured at experiment setup time."""
 
+    experiment_id: str | None
     git_commit_hash: str | None
+    git_branch: str | None
+    git_is_dirty: bool | None
     python_version: str
     package_versions: Mapping[str, str | None] = field(default_factory=dict)
     timestamp_utc: str = field(
@@ -38,7 +41,10 @@ class ExperimentMetadata:
         """Return a JSON-serializable metadata representation."""
 
         return {
+            "experiment_id": self.experiment_id,
             "git_commit_hash": self.git_commit_hash,
+            "git_branch": self.git_branch,
+            "git_is_dirty": self.git_is_dirty,
             "python_version": self.python_version,
             "package_versions": dict(self.package_versions),
             "timestamp_utc": self.timestamp_utc,
@@ -48,11 +54,15 @@ class ExperimentMetadata:
 def capture_experiment_metadata(
     repo_path: str | Path = ".",
     package_names: Sequence[str] | None = None,
+    experiment_id: str | None = None,
 ) -> ExperimentMetadata:
     """Capture reproducibility metadata for the current environment."""
 
     return ExperimentMetadata(
+        experiment_id=experiment_id,
         git_commit_hash=current_git_commit_hash(repo_path),
+        git_branch=current_git_branch(repo_path),
+        git_is_dirty=is_git_dirty(repo_path),
         python_version=platform.python_version(),
         package_versions=installed_package_versions(package_names),
     )
@@ -61,17 +71,34 @@ def capture_experiment_metadata(
 def current_git_commit_hash(repo_path: str | Path = ".") -> str | None:
     """Return the current git commit hash, or ``None`` outside a git checkout."""
 
-    completed = subprocess.run(
-        ["git", "-C", str(Path(repo_path)), "rev-parse", "HEAD"],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
+    completed = _git(repo_path, "rev-parse", "HEAD")
     if completed.returncode != 0:
         return None
 
     commit_hash = completed.stdout.strip()
     return commit_hash or None
+
+
+def current_git_branch(repo_path: str | Path = ".") -> str | None:
+    """Return the current git branch name, or ``None`` outside a branch checkout."""
+
+    completed = _git(repo_path, "rev-parse", "--abbrev-ref", "HEAD")
+    if completed.returncode != 0:
+        return None
+
+    branch = completed.stdout.strip()
+    if not branch or branch == "HEAD":
+        return None
+    return branch
+
+
+def is_git_dirty(repo_path: str | Path = ".") -> bool | None:
+    """Return whether the git checkout has uncommitted tracked or untracked changes."""
+
+    completed = _git(repo_path, "status", "--porcelain")
+    if completed.returncode != 0:
+        return None
+    return bool(completed.stdout.strip())
 
 
 def installed_package_versions(
@@ -98,3 +125,12 @@ def _package_version(package_name: str) -> str | None:
         return importlib_metadata.version(package_name)
     except importlib_metadata.PackageNotFoundError:
         return None
+
+
+def _git(repo_path: str | Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(Path(repo_path)), *args],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
