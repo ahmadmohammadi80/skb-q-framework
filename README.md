@@ -43,6 +43,8 @@ Example JSON shape:
 
 ```json
 {
+  "schema_version": "1.0",
+  "experiment_id": "example-run",
   "vocabulary": {
     "registry": "default",
     "operators": ["Attention", "GQA"]
@@ -90,6 +92,34 @@ metadata = capture_experiment_metadata(package_names=("skb-q-framework",))
 
 Captured metadata includes the current git commit hash, Python version, selected
 package versions, and a UTC timestamp.
+
+## Experiment runner
+
+`ExperimentRunner` creates reproducible result artifacts without running real
+benchmarks or fabricating metric values. If no workload supplies observations,
+registered metrics are serialized with `not_computed` status.
+
+```python
+from skbq.config import load_experiment_config
+from skbq.experiments import ExperimentRunner
+
+config = load_experiment_config("configs/example.json")
+run = ExperimentRunner().run(config)
+```
+
+The runner writes:
+
+```text
+results/
+  <experiment_id>/
+    config.json
+    metadata.json
+    metrics.json
+    warnings.json
+```
+
+Existing run directories are never overwritten. If `<experiment_id>` already
+exists, a deterministic suffix such as `-001` is used for the next run.
 
 ## Results policy
 
