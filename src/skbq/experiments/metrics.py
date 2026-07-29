@@ -105,6 +105,20 @@ class RuntimeMetric(ObservationMetric):
         super().__init__("runtime")
 
 
+class CompressionRatioMetric(ObservationMetric):
+    """Framework metric interface for compression ratio observations."""
+
+    def __init__(self) -> None:
+        super().__init__("compression_ratio")
+
+
+class MemoryEstimationMetric(ObservationMetric):
+    """Framework metric interface for estimated quantized memory usage."""
+
+    def __init__(self) -> None:
+        super().__init__("memory_estimation_bytes")
+
+
 @dataclass(frozen=True, slots=True)
 class MetricRegistry:
     """Deterministic metric plugin registry."""
@@ -122,6 +136,17 @@ class MetricRegistry:
                 AccuracyMetric(),
                 RegretMetric(),
                 RuntimeMetric(),
+            )
+        )
+
+    @classmethod
+    def with_agentq_experiment_metrics(cls) -> MetricRegistry:
+        """Return registry with metrics used by AgentQ experiment workloads."""
+
+        return cls.with_defaults().register_many(
+            (
+                CompressionRatioMetric(),
+                MemoryEstimationMetric(),
             )
         )
 

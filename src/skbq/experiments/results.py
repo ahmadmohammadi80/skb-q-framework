@@ -18,6 +18,11 @@ RESULT_FILENAMES = (
     "warnings.json",
 )
 
+OPTIONAL_ARTIFACT_FILENAMES = (
+    "graph_manifest.json",
+    "allocation_plan.json",
+)
+
 
 @dataclass(frozen=True, slots=True)
 class RunDirectoryManager:
@@ -68,6 +73,7 @@ class ResultWriter:
         metrics: tuple[MetricResult, ...],
         runtime_seconds: float,
         warnings: tuple[str, ...],
+        additional_artifacts: dict[str, dict[str, object]] | None = None,
     ) -> ExperimentResult:
         """Write result artifacts for one experiment run."""
 
@@ -99,10 +105,17 @@ class ResultWriter:
         _write_json_new(run_directory / "metadata.json", metadata_payload)
         _write_json_new(run_directory / "metrics.json", metric_payload)
         _write_json_new(run_directory / "warnings.json", warning_payload)
+        for filename in OPTIONAL_ARTIFACT_FILENAMES:
+            if additional_artifacts and filename in additional_artifacts:
+                _write_json_new(run_directory / filename, additional_artifacts[filename])
 
-        return self.load(run_directory)
+        return self.load(run_directory, optional_artifacts=additional_artifacts)
 
-    def load(self, run_directory: str | Path) -> ExperimentResult:
+    def load(
+        self,
+        run_directory: str | Path,
+        optional_artifacts: dict[str, dict[str, object]] | None = None,
+    ) -> ExperimentResult:
         """Load result artifacts from a run directory."""
 
         path = Path(run_directory)
@@ -126,6 +139,12 @@ def runtime_seconds_since(start_time: float) -> float:
     """Return elapsed monotonic runtime seconds."""
 
     return perf_counter() - start_time
+
+
+def write_json_artifact(path: Path, payload: dict[str, object]) -> None:
+    """Write one JSON artifact without overwriting an existing file."""
+
+    _write_json_new(path, payload)
 
 
 def _write_json_new(path: Path, payload: dict[str, object]) -> None:
