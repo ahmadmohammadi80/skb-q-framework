@@ -4,6 +4,7 @@ from skbq.agentq.policy import (
     AbstractAgentQPolicy,
     AgentQPolicy,
     AgentQPrediction,
+    LearnedAgentQPolicy,
     StructuralReferenceAgentQPolicy,
 )
 from skbq.agentq.provenance import AgentQProvenance
@@ -11,12 +12,14 @@ from skbq.agentq.state import GraphState, OperatorState, StateBuilder
 
 __all__ = [
     "AbstractAgentQPolicy",
+    "ActionDecoder",
     "AgentQPolicy",
     "AgentQPrediction",
     "AgentQProvenance",
     "GraphPolicyNetwork",
     "GraphPolicyOutput",
     "GraphState",
+    "LearnedAgentQPolicy",
     "OperatorState",
     "StateBuilder",
     "StructuralReferenceAgentQPolicy",
@@ -24,6 +27,10 @@ __all__ = [
 
 
 def __getattr__(name: str) -> object:
+    if name == "ActionDecoder":
+        from skbq.agentq.action_decoder import ActionDecoder
+
+        return ActionDecoder
     if name == "GraphPolicyNetwork":
         from skbq.agentq.network import GraphPolicyNetwork
 

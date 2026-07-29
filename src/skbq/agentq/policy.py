@@ -92,3 +92,71 @@ class StructuralReferenceAgentQPolicy(AbstractAgentQPolicy):
             policy_id=self.policy_id,
             config={"policy_type": "structural_reference"},
         )
+
+
+class LearnedAgentQPolicy(AbstractAgentQPolicy):
+    """Inference-only AgentQ policy connecting network logits to allocation decisions."""
+
+    def __init__(
+        self,
+        network: object,
+        bit_budget: object,
+        decoder: object | None = None,
+        state_builder: object | None = None,
+        action_space: object | None = None,
+        policy_id: str = "learned_agentq_pi_theta",
+    ) -> None:
+        from skbq.agentq.action_decoder import ActionDecoder
+        from skbq.agentq.state import StateBuilder
+        from skbq.quantization.action_space import PolicyActionSpace
+        from skbq.quantization.budget import BitBudget
+
+        if not policy_id.strip():
+            raise ValueError("policy_id cannot be empty")
+        if not isinstance(bit_budget, BitBudget):
+            raise TypeError("bit_budget must be a BitBudget")
+
+        self._network = network
+        self._bit_budget = bit_budget
+        self._state_builder = state_builder or StateBuilder()
+        self._policy_id = policy_id
+        selected_action_space = action_space or PolicyActionSpace()
+        self._decoder = decoder or ActionDecoder(action_space=selected_action_space)
+
+    def predict(self, graph_state: GraphState) -> AgentQPrediction:
+        """Run graph policy inference and decode allocation decisions."""
+
+        state = self._validate_graph_state(graph_state)
+        network = self._network
+        network.eval()
+        output = network(state)
+        return self._decoder.decode_to_prediction(
+            graph_state=state,
+            logits=output.logits,
+            bit_budget=self._bit_budget,
+            deterministic=True,
+        )
+
+    def predict_graph(self, graph: object) -> AgentQPrediction:
+        """Build graph state from an operator graph and run inference."""
+
+        from skbq.graph.operator_graph import OperatorGraph
+
+        if not isinstance(graph, OperatorGraph):
+            raise TypeError("graph must be an OperatorGraph")
+        return self.predict(self._state_builder.build(graph))
+
+    def get_provenance(self) -> AgentQProvenance:
+        """Return provenance for this learned inference policy."""
+
+        network = self._network
+        return AgentQProvenance(
+            policy_id=self._policy_id,
+            config={
+                "policy_type": "learned_inference",
+                "decoder_id": self._decoder.decoder_id,
+                "network_num_actions": getattr(network, "num_actions", None),
+                "network_hidden_dim": getattr(network, "hidden_dim", None),
+                "bit_budget": self._bit_budget.to_mapping(),
+            },
+        )
