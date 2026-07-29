@@ -121,6 +121,39 @@ results/
 Existing run directories are never overwritten. If `<experiment_id>` already
 exists, a deterministic suffix such as `-001` is used for the next run.
 
+## Hugging Face model graph extraction
+
+The real model integration layer supports graph extraction for common
+Transformer decoder architectures:
+
+- Llama
+- Qwen / Qwen2
+- Mistral
+
+Unsupported in this milestone: Mamba, RWKV, Jamba, MoE routing models, custom
+kernels, quantization backends, and LLM reasoning adapters.
+
+Hugging Face and PyTorch are optional user-installed dependencies; they are not
+required by the core package or unit tests.
+
+```bash
+python3 -m pip install transformers torch
+```
+
+Load a local model and build an `OperatorGraph`:
+
+```python
+from skbq.models import HuggingFaceModelLoader, HuggingFaceGraphBuilder
+
+loaded = HuggingFaceModelLoader(local_files_only=True).load("/path/to/local/llama")
+graph = HuggingFaceGraphBuilder().build(loaded.model, loaded.config)
+metadata = graph.structural_metadata()
+```
+
+The extracted graph preserves module paths, parent/child topology, direct
+parameter counts, tensor shape metadata, depth positions, and structural
+metadata compatible with `SKBQBridge` and `FrozenBackbone`.
+
 ## Results policy
 
 Do not commit generated benchmark results or fabricated numbers. Experiment
