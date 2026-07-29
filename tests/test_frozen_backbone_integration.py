@@ -10,7 +10,11 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from skbq.backbone import (  # noqa: E402
+    AllocationTarget,
+    EncoderProvenance,
     FrozenBackbone,
+    GraphEncodingResult,
+    PolicyProvenance,
     StructuralFeatureFrozenEncoder,
     UniformFrozenPolicy,
     mean_pool_embeddings,
@@ -33,6 +37,8 @@ class FrozenEncoderReferenceTests(unittest.TestCase):
         self.assertEqual(embedding, candidate.structural_features)
         self.assertEqual(encoded.embedding, embedding)
         self.assertEqual(encoded.encoder_name, "structural_feature_phi")
+        self.assertIsInstance(encoded.provenance, EncoderProvenance)
+        self.assertEqual(len(encoded.provenance.deterministic_id), 64)
 
     def test_mean_pool_embeddings_is_deterministic(self) -> None:
         first = mean_pool_embeddings(((1.0, 3.0), (3.0, 5.0)))
@@ -45,16 +51,23 @@ class FrozenEncoderReferenceTests(unittest.TestCase):
 class FrozenPolicyReferenceTests(unittest.TestCase):
     def test_uniform_policy_returns_p_g_distribution(self) -> None:
         policy = UniformFrozenPolicy()
+        targets = (
+            AllocationTarget("layer0.attention", "graph_operator", operator_id="layer0.attention"),
+            AllocationTarget("layer0.ffn", "graph_operator", operator_id="layer0.ffn"),
+        )
 
-        allocation = policy.allocate((1.0, 2.0, 3.0), budget=9.0)
+        allocation = policy.allocate((1.0, 2.0, 3.0), budget=9.0, targets=targets)
 
         self.assertEqual(allocation.policy_name, "uniform_pi_theta")
         self.assertEqual(allocation.total_budget, 9.0)
+        self.assertIsInstance(allocation.provenance, PolicyProvenance)
         self.assertEqual(allocation.metadata["notation"], "P(G)")
         self.assertEqual(
             dict(allocation.allocations),
-            {"dimension_0": 3.0, "dimension_1": 3.0, "dimension_2": 3.0},
+            {"layer0.attention": 4.5, "layer0.ffn": 4.5},
         )
+        self.assertEqual(allocation.target_allocations[0].target.target_type, "graph_operator")
+        self.assertEqual(len(allocation.allocation_hash()), 64)
 
     def test_uniform_policy_rejects_invalid_budget(self) -> None:
         with self.assertRaises(ValueError):
@@ -83,7 +96,29 @@ class FrozenBackboneIntegrationTests(unittest.TestCase):
 
         self.assertEqual(dict(first.allocations), dict(second.allocations))
         self.assertEqual(first.total_budget, 6.0)
-        self.assertEqual(len(first.allocations), 6)
+        self.assertEqual(len(first.allocations), len(graph.nodes))
+        self.assertTrue(
+            all(
+                allocation.target.target_type == "graph_operator"
+                for allocation in first.target_allocations
+            )
+        )
+
+    def test_backbone_returns_graph_encoding_result(self) -> None:
+        graph = build_transformer_graph(
+            SyntheticArchitectureSpec("Transformer", num_layers=1, hidden_size=8)
+        )
+        backbone = FrozenBackbone()
+
+        first = backbone.encode_graph(graph)
+        second = backbone.encode_graph(graph)
+
+        self.assertIsInstance(first, GraphEncodingResult)
+        self.assertEqual(first.embedding, second.embedding)
+        self.assertEqual(first.encoding_hash(), second.encoding_hash())
+        self.assertEqual(first.node_count, len(graph.nodes))
+        self.assertEqual(first.pooling_metadata["pooling"], "mean")
+        self.assertEqual(first.encoder_provenance.encoder_id, "structural_feature_phi")
 
     def test_encoded_candidates_run_through_skbq_bridge(self) -> None:
         graph = build_transformer_graph(
@@ -109,6 +144,10 @@ class FrozenBackboneIntegrationTests(unittest.TestCase):
         self.assertFalse(decision.used_fallback)
         self.assertIsNotNone(decision.composition.embedding)
         self.assertEqual(decision.composition.confidence, 1.0)
+        self.assertIsNotNone(decision.trace)
+        self.assertEqual(decision.trace.final_embedding, decision.composition.embedding)
+        self.assertEqual(decision.trace.selected_candidate_id, decision.selected_candidate.identifier)
+        self.assertEqual(len(decision.trace.trace_hash()), 64)
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ from skbq.bridge.structural_features import (
     as_feature_vector,
     extract_operator_features,
 )
+from skbq.backbone.provenance import EncoderProvenance
 
 VocabularyEmbedding = tuple[float, ...]
 GraphEmbedding = tuple[float, ...]
@@ -38,6 +39,7 @@ class EncodedOperator:
     operator_id: str
     embedding: VocabularyEmbedding
     encoder_name: str
+    provenance: EncoderProvenance | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,6 +47,15 @@ class StructuralFeatureFrozenEncoder(FrozenEncoder):
     """Deterministic reference encoder using SKB-Q structural features as ``phi(v)``."""
 
     name: str = "structural_feature_phi"
+
+    @property
+    def provenance(self) -> EncoderProvenance:
+        """Return deterministic provenance for this reference encoder."""
+
+        return EncoderProvenance(
+            encoder_id=self.name,
+            config={"embedding_definition": "phi(v)=g(v)"},
+        )
 
     def encode(self, operator: object) -> VocabularyEmbedding:
         """Encode an operator from structural features or structural metadata."""
@@ -67,6 +78,7 @@ class StructuralFeatureFrozenEncoder(FrozenEncoder):
             operator_id=operator_id,
             embedding=self.encode(operator),
             encoder_name=self.name,
+            provenance=self.provenance,
         )
 
 

@@ -26,6 +26,7 @@ from skbq.bridge.structural_features import (
     OperatorStructuralMetadata,
     extract_operator_features,
 )
+from skbq.bridge.trace import BridgeTrace
 
 
 @dataclass(frozen=True, slots=True)
@@ -64,6 +65,7 @@ class BridgeDecision:
     selected_candidate: BridgeCandidate
     used_fallback: bool
     fallback_match: CandidateMatch | None = None
+    trace: BridgeTrace | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -96,6 +98,15 @@ class SKBQBridge:
 
         if self.passes_confidence_gate(composition):
             selected_candidate = composition.selected_candidate
+            trace = BridgeTrace.from_components(
+                source_identifier=source.identifier,
+                structural_features=structural_features,
+                candidate_matches=candidate_matches,
+                similarities=similarities,
+                composition=composition,
+                selected_candidate=selected_candidate,
+                used_fallback=False,
+            )
             self.logger.info(
                 "SKB-Q bridge selected candidate %s for source %s with confidence %.6f",
                 selected_candidate.identifier,
@@ -110,9 +121,19 @@ class SKBQBridge:
                 composition=composition,
                 selected_candidate=selected_candidate,
                 used_fallback=False,
+                trace=trace,
             )
 
         fallback_match = self.deterministic_fallback(structural_features, candidates)
+        trace = BridgeTrace.from_components(
+            source_identifier=source.identifier,
+            structural_features=structural_features,
+            candidate_matches=candidate_matches,
+            similarities=similarities,
+            composition=composition,
+            selected_candidate=fallback_match.candidate,
+            used_fallback=True,
+        )
         self.logger.info(
             "SKB-Q bridge used deterministic fallback candidate %s for source %s",
             fallback_match.candidate.identifier,
@@ -127,6 +148,7 @@ class SKBQBridge:
             selected_candidate=fallback_match.candidate,
             used_fallback=True,
             fallback_match=fallback_match,
+            trace=trace,
         )
 
     def extract_structural_features(
