@@ -1,0 +1,31 @@
+model:
+  name: facebook/opt-125m
+  revision: main
+
+tokenizer:
+  name: facebook/opt-125m
+  revision: main
+
+calibration:
+  dataset: wikitext
+  config: wikitext-2-raw-v1
+  split: train
+  samples: 256
+  max_length: 512
+  seed: 42
+
+sensitivity:
+  method: calibration_loss_delta
+  perturbation: nodewise_candidate_quantization
+  candidate_bits: [2, 3, 4, 8]
+  score_direction: higher_is_more_sensitive
+
+allocation:
+  enabled: false
+  objective: minimize_memory_under_quality_constraint
+  quality_metric: perplexity
+
+reproducibility:
+  deterministic: true
+  record_environment: true
+  record_model_revision: true
