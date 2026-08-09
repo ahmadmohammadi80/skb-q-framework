@@ -1,6 +1,8 @@
 # Google Colab launcher for SKB-Q Stage 3
-# Run in a CUDA runtime.
+# Runtime: Google Colab with GPU enabled.
 
+!git clone -b artifact/reproducibility-hf https://github.com/ahmadmohammadi80/skb-q-framework.git
+%cd skb-q-framework
 !pip -q install -U torch transformers datasets accelerate sentencepiece
 
 !python scripts/estimate_sensitivity_colab.py \
@@ -13,7 +15,7 @@
   --output-dir artifacts/sensitivity
 
 # Inspect the generated artifacts:
-import json, os
+import json
 for p in [
     "artifacts/sensitivity/opt125m_real_sensitivity_dataset.json",
     "artifacts/sensitivity/opt125m_sensitivity_report.json",
