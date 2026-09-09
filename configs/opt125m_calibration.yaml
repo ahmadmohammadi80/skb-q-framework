@@ -1,10 +1,13 @@
 model:
   name: facebook/opt-125m
-  revision: main
+  # Replace with an immutable Hugging Face revision/commit for a final
+  # publication artifact. `main` is intentionally not treated as immutable.
+  revision: "RECORD_EXACT_COMMIT"
 
 tokenizer:
   name: facebook/opt-125m
-  revision: main
+  # Replace with the exact tokenizer revision used for the validated run.
+  revision: "RECORD_EXACT_COMMIT"
 
 calibration:
   dataset: wikitext
@@ -19,13 +22,20 @@ sensitivity:
   perturbation: nodewise_candidate_quantization
   candidate_bits: [2, 3, 4, 8]
   score_direction: higher_is_more_sensitive
+  quantization: symmetric_per_tensor_weight_only_fake_quant
 
 allocation:
+  # This repository branch does not currently provide the complete
+  # manuscript allocation implementation.
   enabled: false
   objective: minimize_memory_under_quality_constraint
   quality_metric: perplexity
 
 reproducibility:
-  deterministic: true
+  # The current script seeds Python/NumPy/PyTorch but does not explicitly
+  # enable torch.use_deterministic_algorithms(). Do not claim strict
+  # deterministic execution until that is enforced and verified.
+  deterministic: false
+  seeds_recorded: true
   record_environment: true
   record_model_revision: true
