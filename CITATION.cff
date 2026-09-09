@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use SKB-Q, please cite the associated research paper and this repository."
+title: "SKB-Q: Structural Knowledge Bridge for Auditable Mixed-Precision Quantization"
+type: software
+abstract: "Research artifact repository for a structure-aware, auditable mixed-precision quantization framework for transformer language models."
+repository-code: "https://github.com/ahmadmohammadi80/skb-q-framework"
+license: MIT
+authors:
+  - family-names: Mohammadi
+    given-names: Ahmad
+    orcid: ""
+version: 0.1.0
+date-released: 2026-08-09
+keywords:
+  - mixed-precision quantization
+  - large language models
+  - transformer models
+  - model compression
+  - reproducibility
+  - structural knowledge
