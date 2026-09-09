@@ -1,13 +1,14 @@
 model:
   name: facebook/opt-125m
-  # Replace with an immutable Hugging Face revision/commit for a final
-  # publication artifact. `main` is intentionally not treated as immutable.
-  revision: "RECORD_EXACT_COMMIT"
+  # `main` is mutable. The validated publication run must record the exact
+  # immutable model revision in its generated metadata.
+  revision: main
 
 tokenizer:
   name: facebook/opt-125m
-  # Replace with the exact tokenizer revision used for the validated run.
-  revision: "RECORD_EXACT_COMMIT"
+  # `main` is mutable. The validated publication run must record the exact
+  # immutable tokenizer revision in its generated metadata.
+  revision: main
 
 calibration:
   dataset: wikitext
@@ -33,9 +34,9 @@ allocation:
 
 reproducibility:
   # The current script seeds Python/NumPy/PyTorch but does not explicitly
-  # enable torch.use_deterministic_algorithms(). Do not claim strict
-  # deterministic execution until that is enforced and verified.
+  # enable torch.use_deterministic_algorithms().
   deterministic: false
+  immutable_revision_required_for_final: true
   seeds_recorded: true
   record_environment: true
   record_model_revision: true
