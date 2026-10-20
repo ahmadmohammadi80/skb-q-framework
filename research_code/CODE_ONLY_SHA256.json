@@ -1,0 +1,15 @@
+{
+  "release_kind": "CODE_ONLY",
+  "published_data": false,
+  "published_frozen_manifests": false,
+  "files": {
+    "BASC20_Validation_CODE_ONLY.ipynb": "991bce24d59d50cc59ac78a4c6a08d809b4a5637ac99a4ae606db8c19b5236ff",
+    "Prospective_Ridge_Selection_CODE_ONLY.ipynb": "a730eb264cf065d5e271c0ba4aea029f01dcf7beaaff6bdb96853a58956520b2",
+    "README_CODE_ONLY.md": "19252c332ab1bee89d11379e69bed028023317a9baedc7e4c6dee02b7bebbf4f",
+    "novelty_gate.py": "d556ab5407c348c5390a3a1eeb57b117e983cf7e01fcdb9e38b92f465073b7bf",
+    "requirements_offline.txt": "629768c791dc604e531abcb0f0497af3fd9d7baff0b8bb440a93532193f79273",
+    "run_additivity_audit.py": "24b4e3dedb029f39bb881ef92f8865534e01f1031b519b466d8c0de25123dac7",
+    "sparse_interactions_screen.py": "7910352b8873def6b37fba17050884f8fd171050fa401a03b800078eea8dde79",
+    "verify_basc_validation.py": "57d0d79759a90de018d622654a2c922a06f165079dd82b70329ecd0405534b1a"
+  }
+}
