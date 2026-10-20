@@ -1,0 +1,58 @@
+{
+  "release_state": "public_numeric_observations; model weights and corpus text are NOT redistributed",
+  "notebook_code_branch": "code-release/skbq-audits-20261020",
+  "source_files_sha256": {
+    "opt_v3_70": {
+      "filename": "SKBQ_VERIFIED_JSON_FOR_PAPER(1).zip",
+      "sha256": "b1f97661282621835e6122537a00825f145233d8cc8ff3b377f9ba0e61bb0050"
+    },
+    "opt_ridge12": {
+      "filename": "SKBQ_Ridge_12Map_Confirmatory.zip",
+      "sha256": "e31b422b5778c22703cccdd111ccf3e00d2a5e7583a011ec4f83ce00fbd828a5"
+    },
+    "qwen_c4_development": {
+      "filename": "SKBQ_Qwen_Stage1_Development.zip",
+      "sha256": "01aaa98020641b93fa5d6e12ee122c55fa3b9a8a53a5357ab6d5683f97a06ddd"
+    },
+    "qwen_c4_holdout": {
+      "filename": "SKBQ_Qwen_Stage2_Holdout.zip",
+      "sha256": "8bf731c6c4050dda8e0aa64839c7ec9b9b571b13c039d37f1d5e0b1e154dfc8c"
+    },
+    "qwen_wikitext_test_prospective": {
+      "filename": "SKBQ_Qwen_Prospective_Decision_FULL.zip",
+      "sha256": "1d233ff7d51c86f92d112c284c1b6bf9e1cac7c9d99192e15aaf6e44d550311d"
+    },
+    "qwen_wikitext_test_baselines": {
+      "filename": "SKBQ_Qwen_Baselines_STAGE_B_FULL.zip",
+      "sha256": "73862f4ef7461d85b94efd7db59014a7106a3ead8e8dfb533193f541ca15b06e"
+    },
+    "qwen_wikitext_validation_basc": {
+      "filename": "SKBQ_BASC20_VALIDATION_FULL.zip",
+      "sha256": "170849c6bb1af1074f8134d8aa58387af6d88f36f91a88f52d9b64364ccc6b65"
+    }
+  },
+  "number_of_policies": {
+    "opt_v3_70": 70,
+    "qwen_c4_development": 31,
+    "qwen_c4_holdout": 13,
+    "qwen_wikitext_test_prospective": 7,
+    "qwen_wikitext_test_baselines": 7,
+    "qwen_wikitext_validation_basc": 9,
+    "opt_ridge12": 14
+  },
+  "models": [
+    "facebook/opt-125m",
+    "facebook/opt-1.3b",
+    "Qwen/Qwen2.5-1.5B"
+  ],
+  "readme": "README_DATASET.md",
+  "limitations": [
+    "Fake-quantized row-wise RTN weights; not packed-kernel latency or energy.",
+    "Development/holdout/test/validation are different protocols and must NOT be pooled.",
+    "The allocation decision test and BASC20 validation are distinct; no claim of cross-family transfer.",
+    "Qwen Stage B repeats some previously executed maps, not independent replication.",
+    "No exact raw C4 or WikiText corpora published: obtain from original dataset maintainers.",
+    "No author or private conversation details included."
+  ],
+  "licence": "No reuse license specified. Public visibility does not imply a permissive copyright license. Authors to choose a license before journal deposit."
+}
