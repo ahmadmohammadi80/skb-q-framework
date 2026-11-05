@@ -1,0 +1,35 @@
+Software validation only; no pretrained OPT-125M/WikiText/CUDA experiment.
+Python: 3.12.14
+PyTorch: 2.6.0+cpu
+CUDA available: False
+datasets: 3.5.1
+Command: /tmp/skbq-verified-env/bin/python -m pip check
+No broken requirements found.
+
+Exit code: 0
+Command: /tmp/skbq-verified-env/bin/python -m compileall -q scripts tests colab_stage3_opt125m.py
+
+Exit code: 0
+Command: /tmp/skbq-verified-env/bin/python -m unittest discover -s tests -v
+test_json_overflow_and_duplicate_keys_rejected (test_sensitivity.ArtifactTests.test_json_overflow_and_duplicate_keys_rejected) ... ok
+test_launcher_stops_after_failed_checkout (test_sensitivity.ArtifactTests.test_launcher_stops_after_failed_checkout) ... ok
+test_missing_duplicate_wrong_counts_and_delta (test_sensitivity.ArtifactTests.test_missing_duplicate_wrong_counts_and_delta) ... ok
+test_nonfinite_json_rejected (test_sensitivity.ArtifactTests.test_nonfinite_json_rejected) ... ok
+test_tampering_detected (test_sensitivity.ArtifactTests.test_tampering_detected) ... ok
+test_unresolved_config_rejected (test_sensitivity.ArtifactTests.test_unresolved_config_rejected) ... ok
+test_valid_fixture_not_certified (test_sensitivity.ArtifactTests.test_valid_fixture_not_certified) ... ok
+test_perturbation_order_and_identity (test_sensitivity.NumericalTests.test_perturbation_order_and_identity) ... ok
+test_quant_levels_and_ties (test_sensitivity.NumericalTests.test_quant_levels_and_ties) ... ok
+test_quant_zero_tiny_and_identity (test_sensitivity.NumericalTests.test_quant_zero_tiny_and_identity) ... ok
+test_restore_on_exception (test_sensitivity.NumericalTests.test_restore_on_exception) ... ok
+test_shift_and_batch_invariance (test_sensitivity.NumericalTests.test_shift_and_batch_invariance) ... ok
+test_tiny_opt_loss_matches_library (test_sensitivity.NumericalTests.test_tiny_opt_loss_matches_library) ... ok
+test_tiny_opt_scope_and_tied_head (test_sensitivity.NumericalTests.test_tiny_opt_scope_and_tied_head) ... ok
+test_zero_target_rejected (test_sensitivity.NumericalTests.test_zero_target_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.736s
+
+OK
+
+Exit code: 0

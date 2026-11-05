@@ -1,0 +1,46 @@
+# Resolved and tested on Linux/Python 3.12, CPU wheel for tests.
+# Launcher installs the matching CUDA 12.4 torch wheel first.
+# CUDA-only wheel dependencies are supplied by that versioned wheel.
+aiohappyeyeballs==2.7.1
+aiohttp==3.14.5
+aiosignal==1.4.0
+attrs==26.1.0
+certifi==2026.10.23
+charset-normalizer==3.5.2
+datasets==3.5.1
+dill==0.3.8
+filelock==4.2.4
+frozenlist==1.8.0
+fsspec==2025.3.0
+hf-xet==1.8.0
+huggingface_hub==0.36.2
+idna==3.20
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+mpmath==1.3.0
+multidict==7.2.1
+multiprocess==0.70.16
+networkx==3.7
+numpy==1.26.4
+packaging==26.3
+pandas==2.2.3
+pip==25.0.1
+propcache==0.5.4
+pyarrow==19.0.1
+python-dateutil==4.0.0
+pytz==2026.6
+PyYAML==6.0.2
+regex==2026.9.29
+requests==2.34.2
+safetensors==0.5.3
+setuptools==78.1.0
+sympy==1.13.1
+tokenizers==0.21.1
+torch==2.6.0
+tqdm==4.70.1
+transformers==4.49.0
+typing_extensions==4.16.0
+tzdata==2026.6
+urllib3==2.8.0
+xxhash==4.0.2
+yarl==1.25.1

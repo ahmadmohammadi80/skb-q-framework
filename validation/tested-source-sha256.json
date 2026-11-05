@@ -1,0 +1,9 @@
+{
+  "colab_stage3_opt125m.py": "0f761d2c7a5ef5c2f9039d8f4a37eae1bf0663828b8b4c771033d50bdc0c088e",
+  "configs/opt125m_calibration.yaml": "12987cff22acd120e9765ca5e63874cd98ab66ef3270e3834abeda28620ca173",
+  "requirements-lock.txt": "7dc2c6a46fb26c38f1dfcd9eb6202c23de895bd2fc657fd78fe4d7815a43ffd6",
+  "scripts/estimate_sensitivity_colab.py": "e37ea1c28110091039f71f8ccabe174e63f0c3350c0cdf07d742f7189d530ab8",
+  "scripts/freeze_protocol.py": "18f3add9d5ce68efa1087127499d76d395c2cd8dbdfa9b355a4fde2453774e27",
+  "scripts/validate_sensitivity.py": "3060dcfe45a9f71d548ead913f77a620318d9a46555ece8044d5023814e7526d",
+  "tests/test_sensitivity.py": "5df1ba0b94e5ed16fd30e2c2284e27c1e58b5b9656a0b687310e57bc4fdfa14e"
+}

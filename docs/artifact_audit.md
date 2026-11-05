@@ -1,53 +1,25 @@
-# SKB-Q Artifact Audit
+# Pre-execution audit fixes
 
-## Purpose
+The former script's automatic `validated: true`, unshifted loss weighting, capped
+perplexity, implicit module scope, mutable loaders, unused YAML, FP16 quantizer
+arithmetic, unchecked restoration, notebook-magics launcher and overwrite-prone
+outputs have been replaced.
 
-This repository is the public code and reproducibility artifact associated with the SKB-Q manuscript. It is intentionally explicit about the boundary between checked-in executable code and the validated experimental evidence package.
+The current artifact provides a consumed frozen configuration, explicit 72-module
+scope excluding the tied head, FP32 quantizer arithmetic, paired per-sample NLL,
+strict JSON and unique run directories, restoration controls, and independent
+artifact validation. Documentation no longer asserts that an unspecified external
+evidence package has already been validated.
 
-## Status
+Validation scope: CPU tests use synthetic tensors and small randomly initialized
+OPT configurations without downloading pretrained weights or WikiText. They check
+loss against the Transformers implementation, padding/shift accounting, batch and
+perturbation-order invariance, identity controls, zero/tiny weights, finite outputs,
+shared-parameter rejection, restoration on exceptions, and malformed artifacts.
+These tests are software evidence only. See `validation/cpu-tests.txt` for the
+recorded test run and environment; no CUDA result is implied.
 
-**Partial reproducibility artifact.**
-
-The `artifact/reproducibility-hf` branch contains an executable Stage-3 sensitivity-estimation procedure for OPT-125M, its configuration, and reproducibility documentation. It does **not** constitute a complete end-to-end implementation of every manuscript experiment.
-
-## What a reviewer can reproduce from this branch
-
-The supplied script can:
-
-- load OPT-125M and WikiText-2 raw-v1;
-- select calibration texts according to the script configuration;
-- tokenize and evaluate a floating-point calibration loss;
-- perturb eligible linear weights one node at a time;
-- apply symmetric per-tensor, weight-only fake quantization;
-- measure calibration-loss deltas for candidate bit widths; and
-- save sensitivity rows and environment metadata as JSON.
-
-## What is not established by this branch
-
-The branch does not provide a verified end-to-end implementation that reproduces all reported Structure, Salience, Full, Random, or final mixed-precision allocation results in the manuscript. In particular, the presence of development/framework code elsewhere in the repository history or in other branches must not be interpreted as proof of complete replication of the final reported numbers.
-
-The checked-in Stage-3 quantization semantics are also not evidence for the exact quantization semantics of every final manuscript experiment.
-
-## Evidence boundary
-
-The numerical results reported in the manuscript remain tied to the validated evidence package supplied with the submission. Existing code is not used to infer, regenerate, or replace a reported number unless that number has been independently validated against the corresponding evidence artifact.
-
-## Recommended citation language
-
-When referring to this repository in the manuscript or cover letter, use language such as:
-
-> The project repository provides the available SKB-Q implementation components, experiment configuration, and reproducibility documentation. It should be interpreted as a partial reproducibility artifact; the validated experimental evidence package contains the machine-readable artifacts supporting the reported numerical results.
-
-Avoid describing the repository as a complete replication package unless a future release adds and validates the missing end-to-end components.
-
-## Release checklist
-
-Before submission, verify that:
-
-- [x] README states the artifact status accurately.
-- [x] Repository structure exposes code, configuration, and documentation clearly.
-- [x] Quantization semantics of the supplied script are documented explicitly.
-- [x] The repository does not claim complete reproduction of manuscript experiments.
-- [x] Mutable model revisions are flagged as a reproducibility limitation.
-- [ ] A future complete release may add immutable model/tokenizer revisions and a pinned environment.
-- [ ] A future complete release may add and validate the missing end-to-end allocation/evaluation implementation.
+Remaining execution gates: actual compatible CUDA environment, immutable Hub assets,
+one-node smoke execution, artifact inspection, then the full diagnostic. The
+allocation algorithm, held-out evaluation and manuscript numerical claims remain
+outside this artifact. Scientific validation stays pending after automated checks.

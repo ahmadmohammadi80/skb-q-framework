@@ -4,14 +4,12 @@ __pycache__/
 .env
 .ipynb_checkpoints/
 .DS_Store
-
-# Large/generated artifacts
 *.pt
 *.pth
 *.bin
 *.safetensors
 outputs/
 logs/
-
-# Local datasets
- data/raw/*
+artifacts/
+frozen_protocol.json
+data/raw/*

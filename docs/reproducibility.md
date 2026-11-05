@@ -1,60 +1,86 @@
-# Reproducibility checklist
+# Frozen diagnostic protocol and acceptance checks
 
-This document describes the reproducibility requirements for the code currently present in the `artifact/reproducibility-hf` branch. The branch is a **partial artifact**: it contains an executable Stage-3 sensitivity procedure, but not a verified end-to-end implementation of every method and experiment reported in the manuscript.
+## Before any measurement
 
-## Before generating results
+1. Use Python 3.12 and the reviewed immutable Git commit with no tracked edits.
+2. Install the pinned environment in an isolated venv. The launcher uses the CUDA
+   12.4 PyTorch 2.6.0 wheel; CPU wheels are only for tests. A compatible NVIDIA
+   driver is required. CUDA execution has not been verified by the CPU test suite.
+3. Resolve the YAML's model, tokenizer, and dataset revisions once using
+   `scripts/freeze_protocol.py --output frozen_protocol.json`. Archive that file.
+   Resolution uses the Hub at preparation time, not an invented commit hash.
+   Subsequent reproductions reuse this file; the resolver refuses to overwrite it.
+4. Run tests, then the one-node smoke diagnostic, then the independent validator.
+   A smoke result is marked `partial_scope: true` and cannot stand for a full run.
+5. Inspect logs, configuration, samples, loss arithmetic, module scope, controls,
+   and manifest before running all 72 block Linear modules.
 
-- [ ] Record the exact base-model identifier and immutable revision/commit.
-- [ ] Record the exact tokenizer identifier and immutable revision/commit.
-- [ ] Record dataset name, configuration, split, and selection procedure.
-- [ ] Record sample count, sequence length, preprocessing, padding, truncation, and special-token policy.
-- [ ] Record candidate bit widths and quantization backend/granularity.
-- [ ] Record the exact sensitivity definition and perturbation procedure.
-- [ ] Record allocation objective and constraints when allocation is evaluated.
-- [ ] Record random seeds and deterministic settings.
-- [ ] Record hardware, Python, PyTorch, Transformers, CUDA, and relevant package versions.
-- [ ] Preserve raw outputs and their configuration metadata.
+## Exact measurement
 
-## What the checked-in Stage-3 script actually does
+- Model/tokenizer: OPT-125M at separately recorded immutable revisions.
+- Data: Salesforce/wikitext, wikitext-2-raw-v1, train at a recorded revision.
+- Strip whitespace, exclude empty rows, shuffle original row indices with Python
+  Random(42), select 256 texts. Text duplicates are retained as dataset rows.
+- Each text is separately tokenized with special tokens enabled, truncation to 512,
+  and right padding to 512. These are not 256 full contiguous token blocks.
+  Save row indices, texts, input IDs, attention masks, special-token mapping and
+  dataset fingerprint; manifest hashes bind the complete tokenized inputs.
+- Evaluate in FP16/eager attention, eval/inference mode, cache disabled.
+  Compute cross entropy on FP32 logits, using logits[:, :-1] and labels[:, 1:].
+  Ignore padding targets, accumulate per-sample NLL in FP64, then divide total
+  NLL by the total number of valid prediction targets. Reject zero-target samples.
+- Calibration perplexity is exp(calibration NLL), without clipping. Nonfinite
+  quantities and overflow fail the run. This is not held-out benchmark perplexity.
+- Scope: q/k/v/out projections and fc1/fc2 in the 12 transformer blocks (72 weights).
+  Biases, embeddings and lm_head remain unchanged. Reject unexpected shared selected
+  parameters; tied input/output embeddings are excluded from the perturbation scope.
+- Quantizer: weight-only, per-tensor, symmetric narrow range [-qmax,+qmax],
+  qmax=2^(bits-1)-1, absmax scale, round-to-nearest ties-to-even; bits 2/3/4/8.
+  Scale, rounding and dequantization use FP32; then cast back to the model dtype.
+  Handle zero tensors explicitly. This is fake quantization, not packed low-bit kernels.
+- For every intervention start from the original weight and restore it in finally,
+  including exception paths. Keep signed deltas, including negative/null results.
+  Rank each bit width by descending delta, breaking ties by module name.
 
-`scripts/estimate_sensitivity_colab.py` performs a real calibration experiment for OPT-125M:
+## Controls and reproducibility
 
-1. Load `facebook/opt-125m` and its tokenizer.
-2. Load WikiText-2 raw-v1 training text.
-3. Keep non-empty texts, shuffle them with the supplied seed, and select the requested number of samples.
-4. Tokenize with `padding="max_length"`, truncation, and the supplied maximum length.
-5. Evaluate FP calibration loss with padding positions masked from the loss.
-6. Temporarily replace one eligible `torch.nn.Linear` weight at a time with a dequantized fake-quantized version.
-7. Use symmetric per-tensor weight-only fake quantization for each requested candidate bit width.
-8. Measure sensitivity as the increase in calibration loss relative to the FP baseline.
-9. Restore the original weight after each perturbation and rank nodes by measured loss increase.
-10. Write raw sensitivity rows and environment metadata to JSON.
+Set Python/NumPy/PyTorch seeds, deterministic PyTorch algorithms, deterministic
+cuBLAS workspace, disable cuDNN benchmarking and TF32, and fix eager attention.
+Unsupported deterministic operations fail rather than silently fall back.
+Record hardware, capability, CUDA runtime, full Python package versions and code SHA.
+Deterministic settings do not establish cross-device bitwise equivalence.
 
-This procedure is a sensitivity-estimation experiment. It is **not** the complete SKB-Q mixed-precision allocation pipeline.
+The full run checks repeat baseline, batch size 1 versus configured batch size,
+identity (16-bit no-op), and baseline recovery after each node. Frozen tolerances
+are atol=1e-4 and rtol=1e-4; any failure requires investigation, not silent relaxation.
+Tests also check perturbation order independence and exception restoration.
+All selected weights are hashed before/after measurement; equality is required.
 
-## Determinism
+## Output and independent audit
 
-The current script seeds Python, NumPy, and PyTorch. It does not explicitly call `torch.use_deterministic_algorithms(True)` and therefore the artifact should not claim strict deterministic execution. For a final publication-grade release, either enforce deterministic algorithms where supported or document the exact non-deterministic operations and their expected effect.
+Each execution uses an exclusive unique directory. JSON uses strict finite numbers
+and atomic replacement. Interrupted/failed status cannot pass validation. Preserve
+partial outputs and failures; never promote them or overwrite a previous run.
 
-## Quantization semantics
+The manifest covers effective config, sample/token data, environment, measurements
+and incremental rows. The validator checks hashes, run identity, completeness,
+unique module/bit pairs, shifted target counts, per-sample sums, deltas, PPL,
+rankings, restoration and numerical controls. It produces a separate report bound
+to the manifest hash. It does not change the producer to `validated: true`.
 
-The checked-in Stage-3 code uses:
+Store raw per-sample NLLs for paired uncertainty analysis. A single calibration
+sample/seed does not establish population-wide rank stability. If that claim is
+needed, predefine additional sample selections and uncertainty analysis before
+examining their results. Do not impose artificial monotonicity across bit widths.
 
-- weight-only fake/simulated quantization;
-- symmetric quantization;
-- per-tensor scale;
-- round-to-nearest via `torch.round`;
-- dequantized floating-point weights returned to the model;
-- no execution through hardware-specific low-bit kernels.
+`runtime_seconds_including_setup` covers setup after run directory creation and
+all controls/interventions. It is not a low-bit inference speed benchmark.
 
-These semantics apply to the Stage-3 sensitivity script only. They must not automatically be attributed to the final manuscript experiments unless the corresponding final implementation is supplied and verified.
+## Manuscript gate
 
-## Evaluation and evidence policy
-
-Do not claim quality, memory, speed, or allocation improvements until the corresponding experiment has actually been executed and its raw output preserved. Keep raw measurements separate from summarized manuscript tables so that a reviewer can audit the reported values.
-
-In particular, an existing script does not retroactively validate previously reported numerical results. Manuscript values must remain tied to the validated evidence package used for the final revision.
-
-## Final-artifact requirements
-
-Before calling the repository a complete reproducibility artifact, add and validate the missing end-to-end components for the manuscript's structural scoring, salience/full scoring, allocation, and evaluation procedures, and provide immutable model/tokenizer revisions plus a pinned environment.
+No verified legacy evidence package is supplied here. Any future claim needs an
+exact evidence manifest and human/independent reproduction review. Full bit allocation,
+parameter-weighted budgets, held-out evaluation and fair baselines are outside this
+diagnostic. Training-calibration PPL must not be compared directly to legacy test
+PPL or different sequence protocols. No novel algorithm, quality, speed, or memory
+gain is established by successful diagnostic execution alone.

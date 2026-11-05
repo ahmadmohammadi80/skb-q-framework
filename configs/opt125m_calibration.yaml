@@ -1,42 +1,21 @@
+# Resolve once with scripts/freeze_protocol.py, then archive the resolved file.
 model:
   name: facebook/opt-125m
-  # `main` is mutable. The validated publication run must record the exact
-  # immutable model revision in its generated metadata.
-  revision: main
-
+  revision: null
 tokenizer:
   name: facebook/opt-125m
-  # `main` is mutable. The validated publication run must record the exact
-  # immutable tokenizer revision in its generated metadata.
-  revision: main
-
-calibration:
-  dataset: wikitext
+  revision: null
+dataset:
+  name: Salesforce/wikitext
   config: wikitext-2-raw-v1
   split: train
+  revision: null
+calibration:
   samples: 256
   max_length: 512
+  batch_size: 8
   seed: 42
-
-sensitivity:
-  method: calibration_loss_delta
-  perturbation: nodewise_candidate_quantization
-  candidate_bits: [2, 3, 4, 8]
-  score_direction: higher_is_more_sensitive
-  quantization: symmetric_per_tensor_weight_only_fake_quant
-
-allocation:
-  # This repository branch does not currently provide the complete
-  # manuscript allocation implementation.
-  enabled: false
-  objective: minimize_memory_under_quality_constraint
-  quality_metric: perplexity
-
-reproducibility:
-  # The current script seeds Python/NumPy/PyTorch but does not explicitly
-  # enable torch.use_deterministic_algorithms().
-  deterministic: false
-  immutable_revision_required_for_final: true
-  seeds_recorded: true
-  record_environment: true
-  record_model_revision: true
+candidate_bits: [2, 3, 4, 8]
+checks:
+  atol: 0.0001
+  rtol: 0.0001
