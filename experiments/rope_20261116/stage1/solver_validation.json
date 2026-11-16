@@ -1,0 +1,6 @@
+{
+  "dense_gram_absolute_error": 2.2737367544323206e-13,
+  "exhaustive_joint_objective": 0.2248722369066476,
+  "eliminated_basis_dp_objective": 0.2248722369066476,
+  "all_checks_passed": true
+}

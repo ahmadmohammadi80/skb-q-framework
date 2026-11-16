@@ -1,0 +1,44 @@
+[
+  {
+    "weight_mean_bits": 5.0,
+    "upgrade_units": 90,
+    "conditioned_objective": 217776.98999023438,
+    "alternating_objective": 217776.98999023438,
+    "identical_bit_and_basis_map": true,
+    "iterations": 2,
+    "alternating_objective_history": [
+      218043.10620117188,
+      217776.98999023438
+    ],
+    "model_inference_performed": false,
+    "ppl_implication": "Identical weights and identical deterministic evaluation produce identical PPL."
+  },
+  {
+    "weight_mean_bits": 6.0,
+    "upgrade_units": 180,
+    "conditioned_objective": 95965.55224609375,
+    "alternating_objective": 95965.55224609375,
+    "identical_bit_and_basis_map": true,
+    "iterations": 2,
+    "alternating_objective_history": [
+      96178.5537109375,
+      95965.55224609375
+    ],
+    "model_inference_performed": false,
+    "ppl_implication": "Identical weights and identical deterministic evaluation produce identical PPL."
+  },
+  {
+    "weight_mean_bits": 7.0,
+    "upgrade_units": 270,
+    "conditioned_objective": 31529.98291015625,
+    "alternating_objective": 31529.98291015625,
+    "identical_bit_and_basis_map": true,
+    "iterations": 2,
+    "alternating_objective_history": [
+      31554.19189453125,
+      31529.98291015625
+    ],
+    "model_inference_performed": false,
+    "ppl_implication": "Identical weights and identical deterministic evaluation produce identical PPL."
+  }
+]
