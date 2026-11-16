@@ -1,0 +1,18 @@
+{
+  "torch.float32": {
+    "max_abs": 0.0335693359375,
+    "rms": 0.0023027940187603235,
+    "reference_max_abs": 1083.7728271484375,
+    "reference_loss": 3.689608097076416,
+    "rotated_loss": 3.689640522003174,
+    "loss_difference": 3.24249267578125e-05
+  },
+  "torch.float64": {
+    "max_abs": 0.0,
+    "rms": 0.0,
+    "reference_max_abs": 1083.772508023264,
+    "reference_loss": 3.6895856857299805,
+    "rotated_loss": 3.6895856857299805,
+    "loss_difference": 0.0
+  }
+}

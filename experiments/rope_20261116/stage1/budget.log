@@ -1,0 +1,30 @@
+Using the latest cached version of the dataset since Salesforce/wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/agent/.cache/huggingface/datasets/Salesforce___wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Mon Nov 16 19:31:58 2026).
+24 fixed 0
+24 fixed 100
+24 fixed 200
+24 fixed 300
+24 fixed 400
+24 fixed 500
+5bit_fixed 64.85770040245887
+24 conditioned 0
+24 conditioned 100
+24 conditioned 200
+24 conditioned 300
+24 conditioned 400
+24 conditioned 500
+5bit_conditioned 64.8314342402291
+72 fixed 0
+72 fixed 100
+72 fixed 200
+72 fixed 300
+72 fixed 400
+72 fixed 500
+7bit_fixed 61.78326517512859
+72 conditioned 0
+72 conditioned 100
+72 conditioned 200
+72 conditioned 300
+72 conditioned 400
+72 conditioned 500
+7bit_conditioned 61.77928760475311

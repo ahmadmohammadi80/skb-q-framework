@@ -1,0 +1,51 @@
+{
+  "identity": {
+    "bytes": 2408496,
+    "sha256": "25bdd7dc56b2f03b5a3d76bab0e7f52a2954a3e13a50ec00cb7d6f4f8ccc9324",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  },
+  "fixed": {
+    "bytes": 2408496,
+    "sha256": "7613279a9247ebaf20e74e2f0a0f30216c3538f3e2e487045a36fc6e847edd56",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  },
+  "conditioned": {
+    "bytes": 2408496,
+    "sha256": "24f8f7b9c0b1add64e33d17c50c3c443bd6d983257911c2e97dfa8afb0c0ed58",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  },
+  "5bit_fixed": {
+    "bytes": 2015280,
+    "sha256": "fd327d4f9c1abc28a642000ffe7ef3bc054dbd9e69bebc4f2c4df83810980639",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  },
+  "5bit_conditioned": {
+    "bytes": 2015280,
+    "sha256": "65e71964c86259971860099b49301e084f161be65c8eec21efc98c9f2a719cbc",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  },
+  "7bit_fixed": {
+    "bytes": 2801712,
+    "sha256": "31243b7cb8bb90c6d5496de77483dcd61b102283a75b00be1d72e0bc97c5326c",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  },
+  "7bit_conditioned": {
+    "bytes": 2801712,
+    "sha256": "bd0635b24fece2de8d7da2f66cb4ba2598b1a419238dfbbd032514e9aeaf7018",
+    "projection_groups_roundtripped": 96,
+    "biases_included": true,
+    "expected_value_equality": true
+  }
+}

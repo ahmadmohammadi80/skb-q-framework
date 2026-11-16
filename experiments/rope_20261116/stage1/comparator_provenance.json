@@ -1,0 +1,20 @@
+{
+  "paper": "arXiv:2608.13365v1",
+  "source_url": "https://arxiv.org/src/2608.13365",
+  "source_sha256": "3ae128e71116005dc0216362e8594332b886fd6a58a665f3882e8cbc8d7a9cb2",
+  "source_archive_members": [
+    "00README.json",
+    "appendix_data.tex",
+    "appendix_proofs.tex",
+    "appendix_repro.tex",
+    "figs",
+    "figs/mechanism_schematic.pdf",
+    "figs/gap_vs_length.pdf",
+    "notation_macros.tex",
+    "paper.bbl",
+    "paper.tex"
+  ],
+  "implementation_in_this_archive": false,
+  "companion_code_reference": "appendix_repro.tex, A.9",
+  "scope": "No public implementation located in inspected source archive and targeted title/identifier searches; not a proof of absence."
+}

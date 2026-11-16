@@ -1,0 +1,58 @@
+scored 8
+scored 16
+scored 24
+scored 32
+scored 40
+scored 48
+fp32 0 563
+fp32 50 563
+fp32 100 563
+fp32 150 563
+fp32 200 563
+fp32 250 563
+fp32 300 563
+fp32 350 563
+fp32 400 563
+fp32 450 563
+fp32 500 563
+fp32 550 563
+fp32 61.38070688804423
+identity 0 563
+identity 50 563
+identity 100 563
+identity 150 563
+identity 200 563
+identity 250 563
+identity 300 563
+identity 350 563
+identity 400 563
+identity 450 563
+identity 500 563
+identity 550 563
+identity 61.90433010336561
+fixed 0 563
+fixed 50 563
+fixed 100 563
+fixed 150 563
+fixed 200 563
+fixed 250 563
+fixed 300 563
+fixed 350 563
+fixed 400 563
+fixed 450 563
+fixed 500 563
+fixed 550 563
+fixed 61.94778325956654
+conditioned 0 563
+conditioned 50 563
+conditioned 100 563
+conditioned 150 563
+conditioned 200 563
+conditioned 250 563
+conditioned 300 563
+conditioned 350 563
+conditioned 400 563
+conditioned 450 563
+conditioned 500 563
+conditioned 550 563
+conditioned 61.94399152228425

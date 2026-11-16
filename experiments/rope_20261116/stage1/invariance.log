@@ -1,0 +1,4 @@
+Using the latest cached version of the dataset since Salesforce/wikitext couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'wikitext-2-raw-v1' at /home/agent/.cache/huggingface/datasets/Salesforce___wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3 (last modified on Mon Nov 16 19:31:58 2026).
+torch.float32 {'max_abs': 0.0335693359375, 'rms': 0.0023027940187603235, 'reference_max_abs': 1083.7728271484375, 'reference_loss': 3.689608097076416, 'rotated_loss': 3.689640522003174, 'loss_difference': 3.24249267578125e-05}
+torch.float64 {'max_abs': 0.0, 'rms': 0.0, 'reference_max_abs': 1083.772508023264, 'reference_loss': 3.6895856857299805, 'rotated_loss': 3.6895856857299805, 'loss_difference': 0.0}

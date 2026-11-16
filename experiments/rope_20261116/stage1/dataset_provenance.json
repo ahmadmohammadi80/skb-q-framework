@@ -1,0 +1,16 @@
+{
+  "dataset": "Salesforce/wikitext",
+  "configuration": "wikitext-2-raw-v1",
+  "split": "test",
+  "dataset_fingerprint": "a46124b21ac53738",
+  "text_sha256": "696cca6b65a171b0a358a4be6732cdfdf2dd6164a32e20fd70e3c13fc4dfae83",
+  "tokenizer_revision": "a39f36b100fe8a5377810d56c3f4789b9c53ac42",
+  "token_count": 288730,
+  "block_length": 512,
+  "complete_blocks": 563,
+  "predicted_tokens": 287693,
+  "discarded_tail_tokens": 474,
+  "document_join": "two newlines",
+  "context_reset_each_block": true,
+  "calibration_text_used_by_candidate": false
+}

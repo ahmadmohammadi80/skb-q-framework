@@ -1,0 +1,71 @@
+{
+  "PPL": {
+    "fp32": 61.38070688804423,
+    "identity": 61.90433010336561,
+    "fixed": 61.94778325956654,
+    "conditioned": 61.94399152228425
+  },
+  "blocks": 563,
+  "predicted_tokens": 287693,
+  "actual_qk_bytes_including_bias_and_scale": 2408496,
+  "comparisons": {
+    "identity": {
+      "delta_ppl": 0.039661418918640834,
+      "moving_block_bootstrap_95pct": {
+        "1": [
+          0.02464950077565664,
+          0.05377466035929466
+        ],
+        "8": [
+          0.021389988086256827,
+          0.05873322113224565
+        ],
+        "16": [
+          0.01975552091127888,
+          0.06045902512717021
+        ]
+      }
+    },
+    "fixed": {
+      "delta_ppl": -0.0037917372822917628,
+      "moving_block_bootstrap_95pct": {
+        "1": [
+          -0.009470036391904912,
+          0.0020440000681420057
+        ],
+        "8": [
+          -0.01088880432904329,
+          0.0033897735956232478
+        ],
+        "16": [
+          -0.01198504961626572,
+          0.00362100809655548
+        ]
+      }
+    }
+  },
+  "bit_changes": 0,
+  "basis_changes": 5,
+  "joint_comparator": {
+    "24": {
+      "joint_objective": 88.85837603715424,
+      "alternating_objective": 88.85837603715424,
+      "same_map": true,
+      "iterations": 2
+    },
+    "48": {
+      "joint_objective": 25.44643902746564,
+      "alternating_objective": 25.44643902746564,
+      "same_map": true,
+      "iterations": 2
+    },
+    "72": {
+      "joint_objective": 6.799267343046793,
+      "alternating_objective": 6.799267343046793,
+      "same_map": true,
+      "iterations": 2
+    }
+  },
+  "uncertainty_scope": "Within one corpus/model; not independent model training repeats. Test split not used to tune grid or bit score.",
+  "metadata_correction": "Initial live script used an erroneous hardcoded theoretical byte count. This summary uses a recomputed count verified against serialized files; run_independent.py now computes it instead of hardcoding."
+}
