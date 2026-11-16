@@ -1,0 +1,14 @@
+{
+  "official_repository": "https://github.com/the-decentralized-compute-company/quantization",
+  "official_commit": "9b1eaac51ce1ba223ffedbe7aef1dd3ff5bb69a2",
+  "official_file_sha256": "13347d7826a9d5c5601783d20b3e9d3fcc70966a0a1174fbb22f14cf89f38382",
+  "normalization": "expected official prefix error = 8 * analytic score / (L+1)",
+  "analytic_population_value": 3.8981307336913247,
+  "official_core_monte_carlo_mean": 3.9341845500950114,
+  "monte_carlo_samples": 2048,
+  "standard_error": 0.0177170095701737,
+  "maximum_dense_prefix_difference": 0.0,
+  "analytic_evaluation_seconds": 0.0003775889999815263,
+  "mc_seconds_including_input_generation": 0.1962953740003286,
+  "scope": "Restricted Gaussian population objective; no claim of timing superiority for real-data empirical CASK calibration or full training reproduction."
+}

@@ -1,0 +1,12 @@
+{
+  "direct_checks": 32,
+  "maximum_relative_error": 2.5465162070639756e-14,
+  "monte_carlo_samples": 120000,
+  "analytic_score": 1.9661806320165955,
+  "monte_carlo_mean": 1.963357712554533,
+  "monte_carlo_standard_error": 0.0046641286432483,
+  "z_score": 0.6052404806949293,
+  "mean_attention_KL": 0.206494149047571,
+  "maximum_sample_KL_minus_bound": -0.01697560043174917,
+  "all_passed": true
+}

@@ -1,0 +1,18 @@
+{
+  "dimensions": {
+    "head": 64,
+    "input": 576,
+    "context": 512
+  },
+  "single_thread_blas": true,
+  "kernel_setup_seconds": 0.002742583999861381,
+  "explicit_rotation_cache_seconds": 0.018907294999735313,
+  "fast_value": 16916.328862975373,
+  "explicit_gram_value": 16916.328862991082,
+  "relative_difference": 9.28617114047075e-13,
+  "kernel_median_seconds": 0.001525558998764609,
+  "explicit_gram_median_seconds": 0.04864110000016808,
+  "per_candidate_speed_ratio": 31.884115946716864,
+  "repetitions": 7,
+  "scope": "Same exact Gaussian population score; synthetic fixed weight matrices; CPU prototype; not end-to-end inference or calibration speedup."
+}

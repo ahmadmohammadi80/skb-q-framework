@@ -1,0 +1,18 @@
+{
+  "README.md": "8d631aa296fc6622fa8b693fd5b88d7761f9d589bebeb214c030706abcf445d9",
+  "PROOF.md": "259d1c3d9635f20ae1fdc388e11ee35da99f83193e9e061c56f78d0075360732",
+  "context_score.py": "914d68b347a7e8a5ccba8b398e9d2c03957cae45650867d50fc0bb9307d4bbce",
+  "run_context.py": "3b218202a17d68b1dd7d09f50be7bed2b4c42e650f77303ef5ced0e50279992e",
+  "validate_context.py": "aa8ea73e6073f55c89d7903458aa46cc8a489cdd76e5d4a7067ba1e3d789d8f4",
+  "validation.json": "88d617f942da5295f97d21f3a573ddd6a8126283831b58259806df78aa6608d5",
+  "protocol.json": "f8884ca1be1e3ecf8b3d5f8b8698546eed2f5ebbe9ab528fcbcfd9cc3b413c37",
+  "scores.json": "d67ee03a387961c7e84feaa726beed72bae8ca8a154c9b8667d661d903c9c28c",
+  "compare_cask.py": "ab78fe48dbd36856e133d5ca8f7132402167a49294e01cc519a185869418d3d3",
+  "cask_comparison.json": "85647cb3891b8c8c6dda23275dc587e8c6dad5f1d0941363b8b17b56969f6bf6",
+  "benchmark_kernel.py": "dab89cb9b320fe71d928e28702bd1010cd092d4b1b520fdeed6b0f12e3dd0776",
+  "kernel_benchmark.json": "0f6490e0873fb7980c4393827552632b8d8ac26230ab5f8a2393fb5f434ccbd7",
+  "find_example.py": "4c4c6c5dfccdcbdff6113363688178fb966122fb1b41a77300e11d05823d2c78",
+  "separation_example.json": "72b788e97dc30cabec752d3e9e320fd2b659b760a0a86a95f97c0bb5b6ff30e3",
+  "official_tests.log": "f1611d496a5869de04deb4443389f134327f174010b92009ac858d102154e1f5",
+  "progress_snapshot.json": "9858514d15a6d79c3bda2e3a277875f9e9ccd8608096e6f30a0d8428c2189fcc"
+}

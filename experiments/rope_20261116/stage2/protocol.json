@@ -1,0 +1,16 @@
+{
+ "status":"exploratory algorithm development; previous test corpus inspected",
+ "model":"HuggingFaceTB/SmolLM2-135M",
+ "revision":"93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+ "context_length":512,
+ "angles":[0,0.19634954084936207,0.39269908169872414,0.5890486225480862],
+ "relative_offset_convention":"query at i, key at j: R_i^T R_j = R_(j-i); causal offsets are nonpositive",
+ "methods":["causal_four","context_no_self","context_self"],
+ "budget_upgrade_units":180,
+ "budget_QK_bytes":10045530,
+ "evaluation":"all complete WikiText-2 raw test 512-token blocks",
+ "no_test_tuning":true,
+ "no_test_tuning_scope":"no changes after locking this stage; corpus already used in previous stages",
+ "novelty_status":"candidate scoring mechanism, not established independent novelty",
+ "assumption":"bias-free projections; independent standard Gaussian input vectors for the score theorem only; not a claim about real activations"
+}
