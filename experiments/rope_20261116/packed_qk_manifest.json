@@ -1,0 +1,26 @@
+{
+  "identity": {
+    "actual_file_bytes": 10045530,
+    "sha256": "62e147680675905910544b1eda3483d45569a26c0b1287c2bffab30307405e30",
+    "roundtripped_projection_groups": 180,
+    "all_values_exactly_match_dequantized_model": true
+  },
+  "fixed": {
+    "actual_file_bytes": 10045530,
+    "sha256": "5b011142b143be91abcde83f20a89965b1d2c2a384798da46e79f2d34e5d0552",
+    "roundtripped_projection_groups": 180,
+    "all_values_exactly_match_dequantized_model": true
+  },
+  "conditioned": {
+    "actual_file_bytes": 10045530,
+    "sha256": "2d314d1ac6b736c596bbc830c4f4cbf0de1004ac7d1ae74bb154cf55790ea2ad",
+    "roundtripped_projection_groups": 180,
+    "all_values_exactly_match_dequantized_model": true
+  },
+  "published_rule_transplant": {
+    "actual_file_bytes": 10045530,
+    "sha256": "855e4c2741e22956dbcbceead3064e051ef448d03c19d556d04d5d02dac2e00e",
+    "roundtripped_projection_groups": 180,
+    "all_values_exactly_match_dequantized_model": true
+  }
+}

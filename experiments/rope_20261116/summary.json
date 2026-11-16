@@ -1,0 +1,79 @@
+{
+  "model": "HuggingFaceTB/SmolLM2-135M",
+  "revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+  "blocks": 595,
+  "predicted_tokens": 304045,
+  "tokenized_stream_length": 304978,
+  "unscored_tail_tokens": 338,
+  "budget_QK_bytes": 10045530,
+  "PPL": {
+    "fp32": 20.718690671908142,
+    "identity": 21.211038373255523,
+    "fixed": 21.225418442277597,
+    "conditioned": 21.1720713767895,
+    "published_rule_transplant": 21.36072946401083
+  },
+  "comparisons": {
+    "identity": {
+      "delta_ppl_conditioned_minus_comparator": -0.03896699646602286,
+      "mean_paired_nll_difference": -0.0018387988835823635,
+      "blocks_lower_nll": 363,
+      "circular_moving_block_bootstrap_95pct_ppl_difference": {
+        "1": [
+          -0.0505721394029468,
+          -0.027580224266991936
+        ],
+        "8": [
+          -0.054359911243658576,
+          -0.023589714070801102
+        ],
+        "16": [
+          -0.056295986043418275,
+          -0.02192763192245026
+        ]
+      }
+    },
+    "fixed": {
+      "delta_ppl_conditioned_minus_comparator": -0.0533470654880972,
+      "mean_paired_nll_difference": -0.0025165213256323035,
+      "blocks_lower_nll": 380,
+      "circular_moving_block_bootstrap_95pct_ppl_difference": {
+        "1": [
+          -0.06534425672349897,
+          -0.040493783275192194
+        ],
+        "8": [
+          -0.06834232873592291,
+          -0.037825575806623664
+        ],
+        "16": [
+          -0.0682935800635053,
+          -0.038320725948883715
+        ]
+      }
+    },
+    "published_rule_transplant": {
+      "delta_ppl_conditioned_minus_comparator": -0.18865808722133082,
+      "mean_paired_nll_difference": -0.008871239173312147,
+      "blocks_lower_nll": 402,
+      "circular_moving_block_bootstrap_95pct_ppl_difference": {
+        "1": [
+          -0.2173490912710622,
+          -0.1590733605871816
+        ],
+        "8": [
+          -0.22353011730891498,
+          -0.15367192953581482
+        ],
+        "16": [
+          -0.22778666689731822,
+          -0.14951241764890577
+        ]
+      }
+    }
+  },
+  "bit_map_changes_conditioned_vs_fixed": 0,
+  "basis_changes_conditioned_vs_fixed": 12,
+  "inference_scope": "Q/K weight fake quantization; all other parameters and activations FP32; no packed-kernel speed claims",
+  "uncertainty_scope": "Exploratory paired block bootstrap of one fixed corpus and one model; not independent training or calibration repetitions."
+}

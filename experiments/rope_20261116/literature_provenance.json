@@ -1,0 +1,14 @@
+{
+  "url": "https://arxiv.org/html/2608.13365",
+  "sha256_of_retrieved_html": "73e04e8af486617daf20eba83bdf9c25b2617f67875896541c26d42564f3f33b",
+  "implemented_sections": [
+    "Equation 3",
+    "Appendix A.2.1 pooled rows estimator"
+  ],
+  "scope": "Controlled estimator transplantation, not full-method replication",
+  "other_primary_sources": [
+    "https://github.com/facebookresearch/SpinQuant",
+    "https://github.com/MPedraBento/gauge-quant",
+    "https://arxiv.org/abs/2609.36032"
+  ]
+}

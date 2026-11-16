@@ -1,0 +1,57 @@
+[
+  {
+    "upgrade_units": 0,
+    "weight_mean_bits": 4.0,
+    "objective": {
+      "identity": 625185.7116699219,
+      "fixed": 624014.9997558594,
+      "conditioned": 624014.9997558594
+    },
+    "changed_bits_vs_fixed": 0,
+    "changed_bases_vs_fixed": 0
+  },
+  {
+    "upgrade_units": 90,
+    "weight_mean_bits": 5.0,
+    "objective": {
+      "identity": 218309.75659179688,
+      "fixed": 218043.10620117188,
+      "conditioned": 217776.98999023438
+    },
+    "changed_bits_vs_fixed": 0,
+    "changed_bases_vs_fixed": 9
+  },
+  {
+    "upgrade_units": 180,
+    "weight_mean_bits": 6.0,
+    "objective": {
+      "identity": 96165.662109375,
+      "fixed": 96178.5537109375,
+      "conditioned": 95965.55224609375
+    },
+    "changed_bits_vs_fixed": 0,
+    "changed_bases_vs_fixed": 12
+  },
+  {
+    "upgrade_units": 270,
+    "weight_mean_bits": 7.0,
+    "objective": {
+      "identity": 31593.64013671875,
+      "fixed": 31554.19189453125,
+      "conditioned": 31529.98291015625
+    },
+    "changed_bits_vs_fixed": 0,
+    "changed_bases_vs_fixed": 13
+  },
+  {
+    "upgrade_units": 360,
+    "weight_mean_bits": 8.0,
+    "objective": {
+      "identity": 1869.9677734375,
+      "fixed": 1867.43115234375,
+      "conditioned": 1866.14794921875
+    },
+    "changed_bits_vs_fixed": 0,
+    "changed_bases_vs_fixed": 13
+  }
+]

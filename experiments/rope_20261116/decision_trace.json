@@ -1,0 +1,206 @@
+[
+  {
+    "layer": 7,
+    "key_head": 2,
+    "query_heads": [
+      6,
+      7,
+      8
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.0,
+    "conditioned_angle_radians": 0.19634954084936207,
+    "fixed_distortion": 2752.45703125,
+    "conditioned_distortion": 2700.79638671875
+  },
+  {
+    "layer": 8,
+    "key_head": 2,
+    "query_heads": [
+      6,
+      7,
+      8
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.5890486225480862,
+    "conditioned_angle_radians": 0.0,
+    "fixed_distortion": 1978.6318359375,
+    "conditioned_distortion": 1931.447265625
+  },
+  {
+    "layer": 10,
+    "key_head": 0,
+    "query_heads": [
+      0,
+      1,
+      2
+    ],
+    "bits": [
+      8,
+      8
+    ],
+    "fixed_angle_radians": 0.0,
+    "conditioned_angle_radians": 0.19634954084936207,
+    "fixed_distortion": 24.32421875,
+    "conditioned_distortion": 24.25390625
+  },
+  {
+    "layer": 11,
+    "key_head": 2,
+    "query_heads": [
+      6,
+      7,
+      8
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.19634954084936207,
+    "conditioned_angle_radians": 0.39269908169872414,
+    "fixed_distortion": 2661.294921875,
+    "conditioned_distortion": 2635.9599609375
+  },
+  {
+    "layer": 13,
+    "key_head": 0,
+    "query_heads": [
+      0,
+      1,
+      2
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.0,
+    "conditioned_angle_radians": 0.19634954084936207,
+    "fixed_distortion": 2339.2705078125,
+    "conditioned_distortion": 2330.142578125
+  },
+  {
+    "layer": 13,
+    "key_head": 1,
+    "query_heads": [
+      3,
+      4,
+      5
+    ],
+    "bits": [
+      8,
+      8
+    ],
+    "fixed_angle_radians": 0.5890486225480862,
+    "conditioned_angle_radians": 0.39269908169872414,
+    "fixed_distortion": 21.78125,
+    "conditioned_distortion": 21.708984375
+  },
+  {
+    "layer": 17,
+    "key_head": 0,
+    "query_heads": [
+      0,
+      1,
+      2
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.19634954084936207,
+    "conditioned_angle_radians": 0.0,
+    "fixed_distortion": 1481.2138671875,
+    "conditioned_distortion": 1469.19580078125
+  },
+  {
+    "layer": 20,
+    "key_head": 0,
+    "query_heads": [
+      0,
+      1,
+      2
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.39269908169872414,
+    "conditioned_angle_radians": 0.19634954084936207,
+    "fixed_distortion": 968.3779296875,
+    "conditioned_distortion": 957.39892578125
+  },
+  {
+    "layer": 20,
+    "key_head": 1,
+    "query_heads": [
+      3,
+      4,
+      5
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.19634954084936207,
+    "conditioned_angle_radians": 0.5890486225480862,
+    "fixed_distortion": 1968.1708984375,
+    "conditioned_distortion": 1944.705078125
+  },
+  {
+    "layer": 21,
+    "key_head": 2,
+    "query_heads": [
+      6,
+      7,
+      8
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.5890486225480862,
+    "conditioned_angle_radians": 0.0,
+    "fixed_distortion": 2587.41943359375,
+    "conditioned_distortion": 2575.474609375
+  },
+  {
+    "layer": 23,
+    "key_head": 0,
+    "query_heads": [
+      0,
+      1,
+      2
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.19634954084936207,
+    "conditioned_angle_radians": 0.5890486225480862,
+    "fixed_distortion": 1815.87109375,
+    "conditioned_distortion": 1794.7373046875
+  },
+  {
+    "layer": 26,
+    "key_head": 0,
+    "query_heads": [
+      0,
+      1,
+      2
+    ],
+    "bits": [
+      4,
+      8
+    ],
+    "fixed_angle_radians": 0.0,
+    "conditioned_angle_radians": 0.19634954084936207,
+    "fixed_distortion": 1080.38671875,
+    "conditioned_distortion": 1080.37744140625
+  }
+]

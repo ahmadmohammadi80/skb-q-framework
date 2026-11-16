@@ -1,0 +1,19 @@
+{
+  "gram_relative_error_max": 3.2526608113256925e-16,
+  "orthogonality_error_max": 2.220446049250313e-16,
+  "commutation_error_max": 1.1102230246251565e-16,
+  "dp_equals_enumeration": true,
+  "row_pack_roundtrip": true,
+  "group_option_bytes": [
+    74752,
+    93184,
+    130048,
+    148480
+  ],
+  "QK_payload_scales_and_90_byte_map": {
+    "identity": 10045530,
+    "fixed": 10045530,
+    "conditioned": 10045530
+  },
+  "scope": "Packing tested on random rows of exact model dimensions. Model inference uses dequantized float32; payload accounting is not measured RAM or latency."
+}
