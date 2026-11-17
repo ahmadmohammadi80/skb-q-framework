@@ -1,0 +1,19 @@
+name: Research prototype verification
+on:
+  push:
+    branches:
+      - main
+      - 'research/**'
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  evidence-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run deterministic research controls
+        run: python experiments/rope_20261116/stage2/isotropy_counterexample.py
