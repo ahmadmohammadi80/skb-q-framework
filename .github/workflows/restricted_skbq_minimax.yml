@@ -1,0 +1,20 @@
+name: SKB-Q finite-environment allocator checks
+on:
+  push:
+    branches:
+      - 'research/**'
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify-candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prepare dependencies
+        run: python -m pip --version
+      - name: Reproduce restricted prototype tests
+        run: python experiments/novelty_candidates_20261119/skbq_multi_environment_allocator.py

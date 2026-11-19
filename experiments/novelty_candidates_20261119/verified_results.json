@@ -1,0 +1,21 @@
+{
+  "status": "Synthetic or restricted exact small-model evidence; no independent novelty claim",
+  "toy_modules": [
+    0,
+    0,
+    7
+  ],
+  "upgrade_budget": 1,
+  "robust_bits": [
+    0,
+    0,
+    1
+  ],
+  "robust_worst_score": "129/4",
+  "gaussian_bits": [
+    0,
+    1,
+    0
+  ],
+  "gaussian_all_environment_worst_score": "1041/16"
+}
